@@ -1,5 +1,9 @@
 # Trust_Vault_FrontEnd
 
+- Trust Vault 1.0.0 FrontEnd
+
+---
+
 This starter React project has been generated using AlgoKit. See below for default getting started instructions.
 
 # Setup
