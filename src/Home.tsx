@@ -2,49 +2,54 @@
 import { useWallet } from '@txnlab/use-wallet-react'
 import React, { useState } from 'react'
 import ConnectWallet from './components/ConnectWallet'
-// 1. Import your new component
 import TrustVaultInterface from './components/TrustVaultInterface'
 
 interface HomeProps {}
 
 const Home: React.FC<HomeProps> = () => {
   const [openWalletModal, setOpenWalletModal] = useState<boolean>(false)
-  // 2. We removed the 'openDemoModal' state
   const { activeAddress } = useWallet()
 
   const toggleWalletModal = () => {
     setOpenWalletModal(!openWalletModal)
   }
 
-  // 3. We removed the 'toggleDemoModal' function
+  // --- THE FIX ---
+  // If the user is connected, we return the Interface IMMEDIATELY.
+  // This removes it from the 'hero' and 'card' wrappers below, allowing it to be full screen.
+  if (activeAddress) {
+    return (
+      <>
+        <TrustVaultInterface />
+        {/* We keep the ConnectWallet modal mounted just in case it's needed for switching accounts, 
+            though usually disconnecting drops you back to the login screen. */}
+        <ConnectWallet openModal={openWalletModal} closeModal={toggleWalletModal} />
+      </>
+    )
+  }
 
+  // --- LOGIN SCREEN ---
+  // If NOT connected, we show the original card layout
   return (
     <div className="hero min-h-screen bg-teal-400">
-      <div className="hero-content text-center rounded-lg p-6 max-w-lg bg-white mx-auto">
+      <div className="hero-content text-center rounded-lg p-6 max-w-lg bg-white mx-auto shadow-2xl">
         <div className="max-w-lg">
-          <h1 className="text-4xl">
-            Welcome to <div className="font-bold">TrustVault 🛡️</div>
+          <h1 className="text-4xl text-slate-800">
+            Welcome to <div className="font-bold text-teal-600">TrustVault 🛡️</div>
           </h1>
-          <p className="py-6">
-            {activeAddress
-              ? 'You are connected. Manage your vault below.'
-              : 'Please connect your wallet to get started.'}
+          <p className="py-6 text-slate-600">
+            Please connect your wallet to get started.
           </p>
 
-          <div className="grid">
-            {/* 4. The Wallet Connection button is now the main focus */}
-            {!activeAddress && (
-              <button data-test-id="connect-wallet" className="btn btn-primary m-2" onClick={toggleWalletModal}>
-                Connect Wallet
-              </button>
-            )}
-
-            {/* 5. Once connected, show the TrustVaultInterface instead of the demo button */}
-            {activeAddress && <TrustVaultInterface />}
-          </div>
+          <button 
+            data-test-id="connect-wallet" 
+            className="btn btn-primary m-2 w-full max-w-xs" 
+            onClick={toggleWalletModal}
+          >
+            Connect Wallet
+          </button>
 
           <ConnectWallet openModal={openWalletModal} closeModal={toggleWalletModal} />
-          {/* 6. We removed the <Transact /> component */}
         </div>
       </div>
     </div>
