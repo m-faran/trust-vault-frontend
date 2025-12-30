@@ -16,7 +16,7 @@ interface VaultInfo {
 
 const TrustVaultInterface: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false)
-  const [appId, setAppId] = useState(749636683);
+  const [appId, setAppId] = useState(749636683)
   const [vaultInfo, setVaultInfo] = useState<VaultInfo | null>(null)
   const [totalVaults, setTotalVaults] = useState<bigint | null>(null)
   const [client, setClient] = useState<TrustVaultClient | null>(null)
@@ -190,7 +190,7 @@ const TrustVaultInterface: React.FC = () => {
 
       // 2. Get App Address
       const appAddress = algosdk.getApplicationAddress(Number(appId))
-      
+
       if (!appAddress) {
         enqueueSnackbar('Failed to compute app address', { variant: 'error' })
         return
@@ -198,7 +198,7 @@ const TrustVaultInterface: React.FC = () => {
 
       // 3. Create the Composer
       const composer = client.newGroup()
-      
+
       // 4. Create the Payment Transaction Object
       const suggestedParams = await algorand.client.algod.getTransactionParams().do()
       const paymentTxn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
@@ -207,7 +207,7 @@ const TrustVaultInterface: React.FC = () => {
         amount: Number(amount),
         suggestedParams: suggestedParams,
       })
-      
+
       // --- THE FIX STARTS HERE ---
 
       // 5. Wrap the transaction with the signer
@@ -216,9 +216,9 @@ const TrustVaultInterface: React.FC = () => {
         txn: paymentTxn,
         signer: transactionSigner,
       }
-      
+
       // 6. Call the method using the object directly
-      // We REMOVED 'composer.addTransaction(...)' 
+      // We REMOVED 'composer.addTransaction(...)'
       // The composer will now handle adding the txn to the group automatically.
       composer.depositFunds({
         args: {
@@ -272,12 +272,12 @@ const TrustVaultInterface: React.FC = () => {
         },
         sender: activeAddress,
         signer: transactionSigner,
-        
+
         // FIX: Use 'fee' directly instead of 'suggestedParams'
         // The generated client expects 'AlgoAmount' here.
         // We use your 'algo' helper to create 2000 microAlgos (0.002 ALGO)
         // If 'algo' expects ALGO units: 0.002 ALGO = 2000 microAlgos
-        staticFee: algo(0.002), 
+        staticFee: algo(0.002),
       })
 
       // 4. Send
@@ -292,7 +292,7 @@ const TrustVaultInterface: React.FC = () => {
     } finally {
       setLoading(false)
     }
-}
+  }
 
   const handleUpdateHeir = async () => {
     if (!client || !activeAddress || !transactionSigner) {
@@ -456,10 +456,10 @@ const TrustVaultInterface: React.FC = () => {
   }
 
   return (
-  <div className="min-h-screen w-full bg-[#0a0f1c] font-['Outfit'] text-[#d8f5f2] relative overflow-hidden">
-    {/* 1. Add Font & Custom CSS Variables */}
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet" />
-    <style>{`
+    <div className="min-h-screen w-full bg-[#0a0f1c] font-['Outfit'] text-[#d8f5f2] relative overflow-hidden">
+      {/* 1. Add Font & Custom CSS Variables */}
+      <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet" />
+      <style>{`
       :root {
         --teal: #03c6b8;
         --cyan: #00aaff;
@@ -504,272 +504,283 @@ const TrustVaultInterface: React.FC = () => {
       }
     `}</style>
 
-    {/* Background Decorations */}
-    <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full bg-[#03c6b8] opacity-[0.05] blur-[100px] pointer-events-none"></div>
-    <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full bg-[#00aaff] opacity-[0.05] blur-[100px] pointer-events-none"></div>
+      {/* Background Decorations */}
+      <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full bg-[#03c6b8] opacity-[0.05] blur-[100px] pointer-events-none"></div>
+      <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full bg-[#00aaff] opacity-[0.05] blur-[100px] pointer-events-none"></div>
 
-    <div className="max-w-4xl mx-auto p-6 space-y-8 relative z-10">
-      
-      {/* Header Section */}
-      <div className="text-center space-y-2 mb-8">
-        <h1 className="text-5xl font-bold gradient-text tracking-tight mb-2">TrustVault 🛡️</h1>
-        <p className="text-[#9fd5d0] text-lg">Secure your legacy on Algorand.</p>
-        
-        {/* Account Component Wrapper */}
-        <div className="mt-6 flex justify-center">
-             <Account />
+      <div className="max-w-4xl mx-auto p-6 space-y-8 relative z-10">
+        {/* Header Section */}
+        <div className="text-center space-y-2 mb-8">
+          <h1 className="text-5xl font-bold gradient-text tracking-tight mb-2">TrustVault 🛡️</h1>
+          <p className="text-[#9fd5d0] text-lg">Secure your legacy on Algorand.</p>
+
+          {/* Account Component Wrapper */}
+          <div className="mt-6 flex justify-center">
+            <Account />
+          </div>
         </div>
-      </div>
 
-      {/* Stats Bar (Replaces Configuration Card) */}
-      <div className="glass-card rounded-2xl p-6 flex flex-wrap justify-between items-center gap-4">
-        <div>
-           <p className="text-[#9fd5d0] text-sm uppercase tracking-wider">Active Vaults</p>
-           <p className="text-3xl font-bold text-white">{totalVaults !== null ? totalVaults.toString() : '-'}</p>
+        {/* Stats Bar (Replaces Configuration Card) */}
+        <div className="glass-card rounded-2xl p-6 flex flex-wrap justify-between items-center gap-4">
+          <div>
+            <p className="text-[#9fd5d0] text-sm uppercase tracking-wider">Active Vaults</p>
+            <p className="text-3xl font-bold text-white">{totalVaults !== null ? totalVaults.toString() : '-'}</p>
+          </div>
+          <div className="text-right">
+            <p className="text-[#9fd5d0] text-sm uppercase tracking-wider">Network</p>
+            <p className="text-xl font-bold text-[#00aaff]">Testnet</p>
+          </div>
         </div>
-        <div className="text-right">
-           <p className="text-[#9fd5d0] text-sm uppercase tracking-wider">Network</p>
-           <p className="text-xl font-bold text-[#00aaff]">Testnet</p>
-        </div>
-      </div>
 
-      {/* Main Grid Layout */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-        {/* Column 1: Vault Management */}
-        <div className="space-y-6">
-            
+        {/* Main Grid Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Column 1: Vault Management */}
+          <div className="space-y-6">
             {/* Vault Info Card */}
             {vaultInfo ? (
-            <div className="glass-card rounded-2xl p-6 relative overflow-hidden group">
+              <div className="glass-card rounded-2xl p-6 relative overflow-hidden group">
                 <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                    <svg className="w-24 h-24 text-[#03c6b8]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
+                  <svg className="w-24 h-24 text-[#03c6b8]" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z" />
+                  </svg>
                 </div>
                 <h2 className="text-2xl font-bold text-white mb-4 border-b border-[#03c6b8]/20 pb-2">Your Vault</h2>
                 <div className="space-y-4">
+                  <div>
+                    <p className="text-[#9fd5d0] text-xs uppercase">Heir Address</p>
+                    <p className="font-mono text-sm truncate text-white">{vaultInfo.heir}</p>
+                  </div>
+                  <div>
+                    <p className="text-[#9fd5d0] text-xs uppercase">Balance</p>
+                    <p className="text-3xl font-bold text-[#03c6b8]">
+                      {Number(vaultInfo.vaultBalance) / 1e6} <span className="text-sm text-white">ALGO</span>
+                    </p>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
                     <div>
-                        <p className="text-[#9fd5d0] text-xs uppercase">Heir Address</p>
-                        <p className="font-mono text-sm truncate text-white">{vaultInfo.heir}</p>
+                      <p className="text-[#9fd5d0] text-xs uppercase">Interval</p>
+                      <p className="text-white">{formatInterval(vaultInfo.heartbeatInterval)}</p>
                     </div>
                     <div>
-                        <p className="text-[#9fd5d0] text-xs uppercase">Balance</p>
-                        <p className="text-3xl font-bold text-[#03c6b8]">{Number(vaultInfo.vaultBalance) / 1e6} <span className="text-sm text-white">ALGO</span></p>
+                      <p className="text-[#9fd5d0] text-xs uppercase">Last Heartbeat</p>
+                      <p className="text-white">{formatTimestamp(vaultInfo.lastHeartbeat)}</p>
                     </div>
-                    <div className="grid grid-cols-2 gap-4">
-                        <div>
-                            <p className="text-[#9fd5d0] text-xs uppercase">Interval</p>
-                            <p className="text-white">{formatInterval(vaultInfo.heartbeatInterval)}</p>
-                        </div>
-                        <div>
-                            <p className="text-[#9fd5d0] text-xs uppercase">Last Heartbeat</p>
-                            <p className="text-white">{formatTimestamp(vaultInfo.lastHeartbeat)}</p>
-                        </div>
-                    </div>
+                  </div>
                 </div>
-                
+
                 {/* Heartbeat Action embedded in Info Card */}
                 <div className="mt-6 pt-4 border-t border-[#03c6b8]/20">
-                    <button
-                        className="btn-glow w-full py-3 rounded-xl font-bold shadow-lg"
-                        onClick={handleHeartbeat}
-                        disabled={loading || !client || !activeAddress}
-                    >
-                        {loading ? 'Processing...' : '💓 Send Heartbeat'}
-                    </button>
+                  <button
+                    className="btn-glow w-full py-3 rounded-xl font-bold shadow-lg"
+                    onClick={handleHeartbeat}
+                    disabled={loading || !client || !activeAddress}
+                  >
+                    {loading ? 'Processing...' : '💓 Send Heartbeat'}
+                  </button>
                 </div>
-            </div>
+              </div>
             ) : (
-                // OPT IN CALL TO ACTION (Shown if no vault info)
-                <div className="glass-card rounded-2xl p-8 text-center border-dashed border-2 border-[#03c6b8]/40">
-                    <h2 className="text-2xl font-bold text-white mb-2">No Vault Found</h2>
-                    <p className="text-[#9fd5d0] mb-6">Create your digital will on the blockchain today.</p>
-                    <button
-                        className="btn-glow px-8 py-3 rounded-xl w-full"
-                        onClick={handleOptIn}
-                        disabled={loading || !client || !activeAddress}
-                    >
-                        {loading ? 'Creating...' : 'Initialize Vault (Opt In)'}
-                    </button>
-                </div>
+              // OPT IN CALL TO ACTION (Shown if no vault info)
+              <div className="glass-card rounded-2xl p-8 text-center border-dashed border-2 border-[#03c6b8]/40">
+                <h2 className="text-2xl font-bold text-white mb-2">No Vault Found</h2>
+                <p className="text-[#9fd5d0] mb-6">Create your digital will on the blockchain today.</p>
+                <button
+                  className="btn-glow px-8 py-3 rounded-xl w-full"
+                  onClick={handleOptIn}
+                  disabled={loading || !client || !activeAddress}
+                >
+                  {loading ? 'Creating...' : 'Initialize Vault (Opt In)'}
+                </button>
+              </div>
             )}
 
             {/* Financial Actions */}
             <div className="glass-card rounded-2xl p-6">
-                <h2 className="text-xl font-semibold text-white mb-4">Manage Funds</h2>
-                <div className="space-y-4">
-                    {/* Deposit */}
-                    <div className="form-control">
-                        <label className="label text-xs uppercase text-[#9fd5d0]">Deposit (ALGO)</label>
-                        <div className="flex gap-2">
-                            <input
-                            type="number"
-                            placeholder="0.00"
-                            className="input input-bordered input-dark w-full rounded-lg px-4"
-                            value={depositAmount}
-                            onChange={(e) => setDepositAmount(e.target.value)}
-                            />
-                            <button
-                            className="btn-glow px-6 rounded-lg whitespace-nowrap"
-                            onClick={handleDepositFunds}
-                            disabled={loading || !client || !activeAddress}
-                            >
-                            Deposit
-                            </button>
-                        </div>
-                    </div>
-                    
-                    {/* Withdraw */}
-                    <div className="form-control pt-2">
-                        <label className="label text-xs uppercase text-[#9fd5d0]">Withdraw (ALGO)</label>
-                        <div className="flex gap-2">
-                            <input
-                            type="number"
-                            placeholder="0.00"
-                            className="input input-bordered input-dark w-full rounded-lg px-4"
-                            value={withdrawAmount}
-                            onChange={(e) => setWithdrawAmount(e.target.value)}
-                            />
-                            <button
-                            className="btn-glow px-6 rounded-lg whitespace-nowrap bg-opacity-20 border border-[#00aaff] text-[#00aaff] hover:bg-[#00aaff] hover:text-white"
-                            style={{ background: 'transparent' }} // Override glow for withdraw
-                            onClick={handleWithdrawFunds}
-                            disabled={loading || !client || !activeAddress}
-                            >
-                            Withdraw
-                            </button>
-                        </div>
-                    </div>
+              <h2 className="text-xl font-semibold text-white mb-4">Manage Funds</h2>
+              <div className="space-y-4">
+                {/* Deposit */}
+                <div className="form-control">
+                  <label className="label text-xs uppercase text-[#9fd5d0]">Deposit (ALGO)</label>
+                  <div className="flex gap-2">
+                    <input
+                      type="number"
+                      placeholder="0.00"
+                      className="input input-bordered input-dark w-full rounded-lg px-4"
+                      value={depositAmount}
+                      onChange={(e) => setDepositAmount(e.target.value)}
+                    />
+                    <button
+                      className="btn-glow px-6 rounded-lg whitespace-nowrap"
+                      onClick={handleDepositFunds}
+                      disabled={loading || !client || !activeAddress}
+                    >
+                      Deposit
+                    </button>
+                  </div>
                 </div>
-            </div>
-        </div>
 
-        {/* Column 2: Configuration & Heir Actions */}
-        <div className="space-y-6">
-            
+                {/* Withdraw */}
+                <div className="form-control pt-2">
+                  <label className="label text-xs uppercase text-[#9fd5d0]">Withdraw (ALGO)</label>
+                  <div className="flex gap-2">
+                    <input
+                      type="number"
+                      placeholder="0.00"
+                      className="input input-bordered input-dark w-full rounded-lg px-4"
+                      value={withdrawAmount}
+                      onChange={(e) => setWithdrawAmount(e.target.value)}
+                    />
+                    <button
+                      className="btn-glow px-6 rounded-lg whitespace-nowrap"
+                      onClick={handleWithdrawFunds}
+                      disabled={loading || !client || !activeAddress}
+                    >
+                      Withdraw
+                    </button>
+                  </div>
+                </div>
+
+                {/* Heartbeat Section */}
+                <div className="glass-card rounded-2xl p-6 mt-6">
+                  <h2 className="text-xl font-semibold text-white mb-2">Send Heartbeat</h2>
+                  <p className="text-[#9fd5d0] text-sm mb-4">Update your last heartbeat timestamp to reset the inactivity timer.</p>
+                  <button
+                    className="btn-glow w-full py-3 rounded-xl font-bold shadow-lg"
+                    onClick={handleHeartbeat}
+                    disabled={loading || !client || !activeAddress}
+                  >
+                    {loading ? <span className="loading loading-spinner" /> : 'Send Heartbeat'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Column 2: Configuration & Heir Actions */}
+          <div className="space-y-6">
             {/* Setup / Config Vault */}
             <div className="glass-card rounded-2xl p-6">
-                <h2 className="text-xl font-semibold text-white mb-4">Configuration</h2>
-                
-                {/* Initial Setup */}
-                <div className="mb-6 pb-6 border-b border-[#03c6b8]/10">
-                    <p className="text-[#9fd5d0] text-sm mb-4">Setup Heir & Timer</p>
-                    <div className="space-y-3">
-                        <input
-                            type="text"
-                            placeholder="Heir Address"
-                            className="input input-bordered input-dark w-full rounded-lg px-4 py-2"
-                            value={heirAddress}
-                            onChange={(e) => setHeirAddress(e.target.value)}
-                        />
-                        <input
-                            type="text"
-                            placeholder="Interval (sec) e.g. 31536000"
-                            className="input input-bordered input-dark w-full rounded-lg px-4 py-2"
-                            value={heartbeatInterval}
-                            onChange={(e) => setHeartbeatInterval(e.target.value)}
-                        />
-                        <button
-                            className="btn-glow w-full py-2 rounded-lg mt-2"
-                            onClick={handleSetupVault}
-                            disabled={loading || !client || !activeAddress}
-                        >
-                            Setup New Vault
-                        </button>
-                    </div>
-                </div>
+              <h2 className="text-xl font-semibold text-white mb-4">Configuration</h2>
 
-                {/* Updates */}
-                <div className="space-y-4">
-                     <p className="text-[#9fd5d0] text-sm">Update Existing Settings</p>
-                     <div className="flex gap-2">
-                        <input 
-                             type="text" 
-                             placeholder="New Heir Address" 
-                             className="input input-bordered input-dark w-full rounded-lg px-3 text-sm"
-                             value={newHeirAddress}
-                             onChange={(e) => setNewHeirAddress(e.target.value)}
-                        />
-                        <button 
-                            className="px-4 py-2 rounded-lg border border-[#03c6b8] text-[#03c6b8] hover:bg-[#03c6b8] hover:text-[#000] transition-colors text-sm font-semibold"
-                            onClick={handleUpdateHeir}
-                            disabled={loading}
-                        >
-                            Update
-                        </button>
-                     </div>
-                     <div className="flex gap-2">
-                        <input 
-                             type="text" 
-                             placeholder="New Interval" 
-                             className="input input-bordered input-dark w-full rounded-lg px-3 text-sm"
-                             value={newHeartbeatInterval}
-                             onChange={(e) => setNewHeartbeatInterval(e.target.value)}
-                        />
-                        <button 
-                            className="px-4 py-2 rounded-lg border border-[#03c6b8] text-[#03c6b8] hover:bg-[#03c6b8] hover:text-[#000] transition-colors text-sm font-semibold"
-                            onClick={handleUpdateHeartbeatInterval}
-                            disabled={loading}
-                        >
-                            Update
-                        </button>
-                     </div>
+              {/* Initial Setup */}
+              <div className="mb-6 pb-6 border-b border-[#03c6b8]/10">
+                <p className="text-[#9fd5d0] text-sm mb-4">Setup Heir & Timer</p>
+                <div className="space-y-3">
+                  <input
+                    type="text"
+                    placeholder="Heir Address"
+                    className="input input-bordered input-dark w-full rounded-lg px-4 py-2"
+                    value={heirAddress}
+                    onChange={(e) => setHeirAddress(e.target.value)}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Interval (sec) e.g. 31536000"
+                    className="input input-bordered input-dark w-full rounded-lg px-4 py-2"
+                    value={heartbeatInterval}
+                    onChange={(e) => setHeartbeatInterval(e.target.value)}
+                  />
+                  <button
+                    className="btn-glow w-full py-2 rounded-lg mt-2"
+                    onClick={handleSetupVault}
+                    disabled={loading || !client || !activeAddress}
+                  >
+                    Setup New Vault
+                  </button>
                 </div>
+              </div>
+
+              {/* Updates */}
+              <div className="space-y-4">
+                <p className="text-[#9fd5d0] text-sm">Update Existing Settings</p>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    placeholder="New Heir Address"
+                    className="input input-bordered input-dark w-full rounded-lg px-3 text-sm"
+                    value={newHeirAddress}
+                    onChange={(e) => setNewHeirAddress(e.target.value)}
+                  />
+                  <button
+                    className="px-4 py-2 rounded-lg border border-[#03c6b8] text-[#03c6b8] hover:bg-[#03c6b8] hover:text-[#000] transition-colors text-sm font-semibold"
+                    onClick={handleUpdateHeir}
+                    disabled={loading}
+                  >
+                    Update
+                  </button>
+                </div>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    placeholder="New Interval"
+                    className="input input-bordered input-dark w-full rounded-lg px-3 text-sm"
+                    value={newHeartbeatInterval}
+                    onChange={(e) => setNewHeartbeatInterval(e.target.value)}
+                  />
+                  <button
+                    className="px-4 py-2 rounded-lg border border-[#03c6b8] text-[#03c6b8] hover:bg-[#03c6b8] hover:text-[#000] transition-colors text-sm font-semibold"
+                    onClick={handleUpdateHeartbeatInterval}
+                    disabled={loading}
+                  >
+                    Update
+                  </button>
+                </div>
+              </div>
             </div>
 
             {/* External Actions (Query / Claim) */}
             <div className="glass-card rounded-2xl p-6">
-                <h2 className="text-xl font-semibold text-white mb-4">External Actions</h2>
-                
-                <div className="space-y-6">
-                    <div>
-                        <label className="label text-xs uppercase text-[#9fd5d0]">Query Any Vault</label>
-                        <div className="flex gap-2">
-                            <input
-                                type="text"
-                                placeholder="Owner Address"
-                                className="input input-bordered input-dark w-full rounded-lg px-4"
-                                value={queryVaultOwner}
-                                onChange={(e) => setQueryVaultOwner(e.target.value)}
-                            />
-                            <button
-                                className="px-4 py-2 rounded-lg bg-[#1f2937] text-white hover:bg-[#374151] border border-gray-600"
-                                onClick={handleQueryVault}
-                                disabled={loading}
-                            >
-                                🔍
-                            </button>
-                        </div>
-                    </div>
+              <h2 className="text-xl font-semibold text-white mb-4">External Actions</h2>
 
-                    <div className="pt-4 border-t border-[#03c6b8]/10">
-                        <label className="label text-xs uppercase text-[#00aaff] font-bold">Heir Claim</label>
-                        <p className="text-xs text-[#9fd5d0] mb-2">Claim funds if owner is inactive.</p>
-                        <div className="flex gap-2">
-                            <input
-                                type="text"
-                                placeholder="Inactive Vault Address"
-                                className="input input-bordered input-dark w-full rounded-lg px-4"
-                                value={claimVaultOwner}
-                                onChange={(e) => setClaimVaultOwner(e.target.value)}
-                            />
-                            <button
-                                className="btn-glow px-4 rounded-lg whitespace-nowrap bg-gradient-to-r from-red-500 to-orange-500 text-white"
-                                style={{ background: 'linear-gradient(135deg, #ff5f6d, #ffc371)', color: 'white' }}
-                                onClick={handleClaimFunds}
-                                disabled={loading}
-                            >
-                                Claim
-                            </button>
-                        </div>
-                    </div>
+              <div className="space-y-6">
+                <div>
+                  <label className="label text-xs uppercase text-[#9fd5d0]">Query Any Vault</label>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      placeholder="Owner Address"
+                      className="input input-bordered input-dark w-full rounded-lg px-4"
+                      value={queryVaultOwner}
+                      onChange={(e) => setQueryVaultOwner(e.target.value)}
+                    />
+                    <button
+                      className="px-4 py-2 rounded-lg bg-[#1f2937] text-white hover:bg-[#374151] border border-gray-600"
+                      onClick={handleQueryVault}
+                      disabled={loading}
+                    >
+                      🔍
+                    </button>
+                  </div>
                 </div>
-            </div>
 
+                <div className="pt-4 border-t border-[#03c6b8]/10">
+                  <label className="label text-xs uppercase text-[#00aaff] font-bold">Heir Claim</label>
+                  <p className="text-xs text-[#9fd5d0] mb-2">Claim funds if owner is inactive.</p>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      placeholder="Inactive Vault Address"
+                      className="input input-bordered input-dark w-full rounded-lg px-4"
+                      value={claimVaultOwner}
+                      onChange={(e) => setClaimVaultOwner(e.target.value)}
+                    />
+                    <button
+                      className="btn-glow px-4 rounded-lg whitespace-nowrap bg-gradient-to-r from-red-500 to-orange-500 text-white"
+                      style={{ background: 'linear-gradient(135deg, #ff5f6d, #ffc371)', color: 'white' }}
+                      onClick={handleClaimFunds}
+                      disabled={loading}
+                    >
+                      Claim
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-)
+  )
 }
 
 export default TrustVaultInterface
